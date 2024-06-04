@@ -8,10 +8,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Specify Sofar API URL
-spotterId = "SPOT-31778C"
-startDate = "2024-06-03T03:36:44.000Z"
-endDate = "2024-06-03T03:38:01.000Z"
-token = "b13f175a58411e50672df250ddc460"
+spotterId = "SPOT-31778C"               # Replace with your spotter ID
+startDate = "2024-06-03T03:36:44.000Z"  # Replace with desired start date in this format
+endDate = "2024-06-03T03:38:01.000Z"    # Replace with desired end date in this format
+token = "xxxx"                          # Replace with your authentification token
 url = f"https://api.sofarocean.com/api/sensor-data?spotterId={spotterId}&startDate={startDate}&endDate={endDate}&token={token}"
 
 # Specify filepaths
