@@ -8,11 +8,12 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
 # Specify Sofar API URL
-spotterId = "SPOT-31778C"               # Replace with your spotter ID
-startDate = "2024-06-03T03:36:44.000Z"  # Replace with desired start date in this format
-endDate = "2024-06-03T03:38:01.000Z"    # Replace with desired end date in this format
-token = "xxxx"                          # Replace with your authentification token
+spotterId = "SPOT-31778C"
+startDate = "2024-06-04T19:00:30.000Z"
+endDate = "2024-06-04T19:03:22.000Z"
+token = "b13f175a58411e50672df250ddc460"
 url = f"https://api.sofarocean.com/api/sensor-data?spotterId={spotterId}&startDate={startDate}&endDate={endDate}&token={token}"
+print(url)
 
 # Specify filepaths
 startDate_only = startDate[:10]
@@ -80,22 +81,24 @@ def main():
         timestamp = entry['timestamp']
 
         # Conditionals on img data and txt data
-        if decoded_value.startswith('<START IMG'): # checks if data entry starts with <START IMG>
-            collecting_image_data = True # will now run conditionals for img data only
-            image_data = [] 
+        if '<START IMG' in decoded_value:  # checks if data entry contains <START IMG
+            print('start img found')
+            collecting_image_data = True  # will now run conditionals for img data only
+            image_data = []
             image_index = re.search(r'<START IMG (\d+)>', decoded_value).group(1)
-        elif decoded_value.startswith('<END IMG') and collecting_image_data: # turns off specific conditionals for img data
-            save_img_entry(image_data, image_index, img_directory) # converts collected data to image and saves it 
+        elif '<END IMG' in decoded_value and collecting_image_data:  # checks if data entry contains <END IMG
+            save_img_entry(image_data, image_index, img_directory)  # converts collected data to image and saves it 
             collecting_image_data = False
-            image_data = [] # clears data for possible future images with new data
+            image_data = []  # clears data for possible future images with new data
         elif collecting_image_data:
-            match = re.search(r'<I(\d+)>', decoded_value) 
-            if match: # finds data with <Ixx> tag to store in image_data
+            match = re.search(r'<I(\d+)>', decoded_value)
+            if match:  # finds data with <Ixx> tag to store in image_data
                 tag_number = int(match.group(1))
                 content = decoded_value[decoded_value.find('>')+1:]  # Extract data after the tag
                 image_data.append((tag_number, content))
-        elif decoded_value.startswith(txt_tag): # runs text conversion if data entry has text tag
+        elif txt_tag in decoded_value:  # runs text conversion if data entry contains text tag
             save_txt_entry(txt_path, latitude, longitude, timestamp, decoded_value)
+
 
 if __name__ == "__main__":
     main()
