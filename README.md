@@ -1,5 +1,6 @@
 # REMORA_Local
 Local scripts for the Remora system
+(Except for user_code.cpp. This is the app code for Bristlemouth development board)
 
 Raspberry Pi code found at [REMORA_RPi](https://github.com/mjpeauroi/REMORA_RPi)
 
